@@ -1,0 +1,49 @@
+Question 3  - 15612
+SELECT count(*)
+from 
+green_taxi_data gtd
+where
+CAST(lpep_pickup_datetime as date) = '2019-09-18' and
+CAST(lpep_dropoff_datetime as date) = '2019-09-18'
+
+Question 4  - "2019-09-26"
+SELECT 
+CAST(lpep_pickup_datetime as date),
+Max(trip_distance)
+from 
+green_taxi_data gtd
+group by 1
+order by max desc
+
+Question 5 - "Brooklyn" "Manhattan" "Queens"
+SELECT 
+puz."Borough",
+SUM(total_amount)
+from 
+green_taxi_data gtd, 
+zones puz
+where
+CAST(lpep_pickup_datetime as date) = '2019-09-18' and
+gtd."PULocationID" = puz."LocationID" and
+puz."Borough" !='Unknown'
+
+group by puz."Borough"
+having SUM(total_amount) > 50000
+order by 2 desc
+
+Question 6 - JFK airport
+SELECT 
+doz."Zone" as "Dropoff Zone",
+MAX(tip_amount)
+from 
+green_taxi_data gtd, 
+zones puz,
+zones doz
+where
+gtd."PULocationID" = puz."LocationID" and
+gtd."DOLocationID" = doz."LocationID" and
+puz."Zone" = 'Astoria' and
+EXTRACT(MONTH from lpep_pickup_datetime) = 9 and
+EXTRACT(YEAR from lpep_pickup_datetime) = '2019'
+Group by doz."Zone" 
+order by 2 desc

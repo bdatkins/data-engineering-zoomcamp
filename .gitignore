@@ -14,3 +14,5 @@
 serving_dir
 .ipynb_checkpoints/
 !week_6_stream_processing/avro_example/data/rides.csv
+01-docker-terraform/2_docker_sql/output.csv.gz
+01-docker-terraform/linear-archway-412518-00edc430e322.json

@@ -1,0 +1,134 @@
+docker run -it -e POSTGRES_USER="root" -e POSTGRES_PASSWORD="root" -e POSTGRES_DB="ny_taxi" -v $(pwd)/ny_taxi_postgres_data:/var/lib/postgresql/data -p 5432:5432 --network=pg-network --name=pg-database postgres:13
+
+
+
+
+Homework 1
+Question 1
+      --rm                             Automatically remove the container
+                                       when it exits
+
+
+
+Question 2
+root@203613880db1:/# pip list
+Package    Version
+---------- -------
+pip        23.0.1
+setuptools 58.1.0
+wheel      0.42.0
+
+
+docker run -it -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" -e PGADMIN_DEFAULT_PASSWORD="root" -p 8080:80 --network=pg-network --name=pgamdmin  dpage/pgadmin4
+
+
+
+
+
+python3 ingest_data_local.py --user=root --password=root --host=localhost --port=5432 --db_name=ny_taxi --table_name='green_taxi_data' --csv_url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-09.csv.gz
+
+
+
+ docker run -it --network=pg-network  taxi-ingest:1.0.0  --user=root --password=root --host=pg-database --port=5432 --db_name=ny_taxi --table_name='green_taxi_data' --csv_url=https://github.com/DataTalksClub/nyc-tlc-data/releases/download/green/green_tripdata_2019-09.csv.gz
+
+Question 3  - 15612
+ SELECT count(*)
+from 
+green_taxi_data gtd
+where
+CAST(lpep_pickup_datetime as date) = '2019-09-18' and
+CAST(lpep_dropoff_datetime as date) = '2019-09-18'
+
+Question 4  - "2019-09-26"
+SELECT 
+CAST(lpep_pickup_datetime as date),
+Max(trip_distance)
+
+
+from 
+green_taxi_data gtd
+
+
+group by 1
+order by max desc
+
+Question 5 - "Brooklyn" "Manhattan" "Queens"
+SELECT 
+puz."Borough",
+SUM(total_amount)
+
+from 
+green_taxi_data gtd, 
+zones puz
+where
+CAST(lpep_pickup_datetime as date) = '2019-09-18' and
+gtd."PULocationID" = puz."LocationID" and
+puz."Borough" !='Unknown'
+
+group by puz."Borough"
+having SUM(total_amount) > 50000
+order by 2 desc
+
+Question 6 - JFK airport
+SELECT 
+doz."Zone" as "Dropoff Zone",
+MAX(tip_amount)
+
+from 
+green_taxi_data gtd, 
+zones puz,
+zones doz
+where
+gtd."PULocationID" = puz."LocationID" and
+gtd."DOLocationID" = doz."LocationID" and
+puz."Zone" = 'Astoria' and
+EXTRACT(MONTH from lpep_pickup_datetime) = 9 and
+EXTRACT(YEAR from lpep_pickup_datetime) = '2019'
+
+Group by doz."Zone" 
+
+order by 2 desc
+
+Question 7
+Terraform
+
+
+
+
+
+
+
+
+
+
+
+
+
+Terraform section
+
+
+docker run -it -e POSTGRES_USER="root" -e POSTGRES_PASSWORD="root" -e POSTGRES_DB="ny_taxi" -v dtc_postgres_volune_local:/var/lib/postgresql/data -p 5432:5432 --network=pg-network --name=pg-database postgres:13
+
+
+docker run -it -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" -e PGADMIN_DEFAULT_PASSWORD="root" -p 8080:80 --network=pg-network --name=pgamdmin  dpage/pgadmin4
+
+
+
+Google Cloud linear-archway-412518
+
+export GOOGLE_APPLICATION_CREDENTIALS=/Users/barbaraatkins/dev/projects/data-engineering-zoomcamp/01-docker-terraform/linear-archway-412518-00edc430e322.json
+
+
+VM 34.75.249.36
+
+config 
+Host de-zoomcamp
+     HostName 34.75.249.36
+     User barbaraatkins
+     IdentityFile /Users/barbaraatkins/.ssh/gcp
+
+
+
+/Users/barbaraatkins/.ssh/gpc
+~                                                                               
+~                                                  
