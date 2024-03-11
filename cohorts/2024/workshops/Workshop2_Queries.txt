@@ -1,0 +1,92 @@
+Question 1
+
+CREATE MATERIALIZED VIEW trip_length_routes AS
+  	SELECT 
+	taxi_zone.Zone || '->' || taxi_zone_1.Zone as route, 
+	avg(tpep_dropoff_datetime - tpep_pickup_datetime) as avg_route_length,
+ 	min(tpep_dropoff_datetime - tpep_pickup_datetime) as min_route_length,
+ 	max(tpep_dropoff_datetime - tpep_pickup_datetime) as max_route_length
+ 	FROM trip_data
+ 	JOIN taxi_zone ON trip_data.PULocationID = taxi_zone.location_id
+ 	JOIN taxi_zone as taxi_zone_1 ON trip_data.DOLocationID = taxi_zone_1.location_id
+	GROUP BY 1
+
+
+CREATE MATERIALIZED VIEW longest_avg_length_route AS
+	SELECT 
+	route,
+	max(avg_route_length)
+	FROM
+	trip_length_routes
+	GROUP BY route
+	ORDER BY max DESC
+	LIMIT 1;
+
+dev=> select * from longest_avg_length_route;
+          route           |   max    
+--------------------------+----------
+ Yorkville East->Steinway | 23:59:33
+
+
+
+Question 2.
+
+CREATE MATERIALIZED VIEW trip_length_routes_2 AS
+  	SELECT 
+	taxi_zone.Zone || '->' || taxi_zone_1.Zone as route, 
+	avg(tpep_dropoff_datetime - tpep_pickup_datetime) as avg_route_length,
+ 	min(tpep_dropoff_datetime - tpep_pickup_datetime) as min_route_length,
+ 	max(tpep_dropoff_datetime - tpep_pickup_datetime) as max_route_length,
+	count(*) trips
+ 	FROM trip_data
+ 	JOIN taxi_zone ON trip_data.PULocationID = taxi_zone.location_id
+ 	JOIN taxi_zone as taxi_zone_1 ON trip_data.DOLocationID = taxi_zone_1.location_id
+	GROUP BY 1
+
+CREATE MATERIALIZED VIEW longest_avg_length_route_with_trip AS
+	SELECT 
+	route,
+	max(avg_route_length),
+	count(trips)
+	FROM
+	trip_length_routes_2
+	GROUP BY route
+	ORDER BY max DESC
+	LIMIT 1;
+
+dev=> select * from longest_avg_length_route_with_trip;
+          route           |   max    | count 
+--------------------------+----------+-------
+ Yorkville East->Steinway | 23:59:33 |     1
+
+
+
+Question 3
+
+CREATE MATERIALIZED VIEW busiest_pickup_zones_17_hr AS 
+WITH t AS (
+	select max(tpep_pickup_datetime) max_datetime from trip_data
+)
+SELECT
+    taxi_zone.Zone AS pickup_zone,
+    count(*) AS pickup_count
+FROM
+    t,
+    trip_data
+        JOIN taxi_zone
+            ON trip_data.PULocationID = taxi_zone.location_id
+WHERE
+    trip_data.tpep_pickup_datetime > (t.max_datetime - INTERVAL '17' HOUR)
+GROUP BY
+    taxi_zone.Zone
+ORDER BY pickup_count DESC
+LIMIT 3
+
+
+dev=> select * from busiest_pickup_zones_17_hr;
+     pickup_zone     | pickup_count 
+---------------------+--------------
+ LaGuardia Airport   |           19
+ JFK Airport         |           17
+ Lincoln Square East |           17
+(3 rows)
