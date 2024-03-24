@@ -1,0 +1,43 @@
+
+Confluent
+cluster: de_cluster
+
+de_kafka_api_key
+Key: 6WTHNKBC4NSUEIPU
+Secret: YjJjUmZt07Og2BX2KR3LiEA8bcz5qhcBCeSijZB6/3IHYJLFH8PePyasd8EgMpcP
+
+
+schema registry key: AELMIVL2VORM3PN2
+secret: YHqFoMZZ/JfklfOAwPTK4Re6IoZdQ9Z8ssaQDd813J3pOMtEsOko/xEw4EwjJLfu
+
+
+<<<<<<< HEAD
+<<<<<<< HEAD
+^C(base) silverlining:python barbaraatkins$ docker exec -it redpanda-1 rpk topic create green-trips
+TOPIC        STATUS
+green-trips  OK
+
+
+
+Total took 44.80 seconds
+Total took 45.32 seconds; rows 476386
+
+Row(key=None, value=bytearray(b'{"lpep_pickup_datetime": "2019-10-01 00:26:02", "lpep_dropoff_datetime": "2019-10-01 00:39:58", "PULocationID": 112, "DOLocationID": 196, "passenger_count": 1.0, "trip_distance": 5.88, "tip_amount": 0.0}'), topic='green-trips', partition=0, offset=0, timestamp=datetime.datetime(2024, 3, 21, 21, 41, 32, 159000), timestampType=0)
+
+
+Row(lpep_pickup_datetime='2019-10-01 00:26:02', lpep_dropoff_datetime='2019-10-01 00:39:58', PULocationID=112, DOLocationID=196, passenger_count=1.0, trip_distance=5.88, tip_amount=0.0)
+
+
+Question 6
+=======
+topic: de_tutorial_topic
+>>>>>>> parent of 5b44485 (Week 6 HW and notes)
+=======
+topic: de_tutorial_topic
+>>>>>>> parent of 6b3d7bd (Update Week6notes.txt)
+
+Tutorial_DatagenSourceConnector
+
+
+
+TODO get java running / test topic creation.
